@@ -174,11 +174,7 @@ namespace XIVSlothCombo.Combos.PvE
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Haima;
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-<<<<<<< Updated upstream
-                    => actionID is Haima && (!HasFriendlyTarget()) ? Panhaima : actionID;
-=======
                 => actionID is Haima && (!HasFriendlyTarget() || (IsOnCooldown(Haima) && IsOffCooldown(Panhaima))) ? Panhaima : actionID;
->>>>>>> Stashed changes
         }
 
         /*
@@ -189,11 +185,7 @@ namespace XIVSlothCombo.Combos.PvE
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Krasis;
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-<<<<<<< Updated upstream
-                    => actionID is Krasis && ActionReady(Physis2) && (!IsOffCooldown(Krasis)) ? Physis2 : actionID;
-=======
-                    => actionID is Krasis && (!HasFriendlyTarget() || (IsOnCooldown(Krasis) && IsOffCooldown(Physis2))) ? Physis2 : actionID;
->>>>>>> Stashed changes
+                => actionID is Krasis && (!HasFriendlyTarget() || (IsOnCooldown(Krasis) && IsOffCooldown(Physis2))) ? Physis2 : actionID;
         }
 
         /*
