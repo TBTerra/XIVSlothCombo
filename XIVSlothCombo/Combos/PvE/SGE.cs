@@ -59,7 +59,8 @@ namespace XIVSlothCombo.Combos.PvE
         // Action Groups
         internal static readonly List<uint>
             AddersgallList = new() { Taurochole, Druochole, Ixochole, Kerachole },
-            PhlegmaList = new() { Phlegma, Phlegma2, Phlegma3 };
+            PhlegmaList = new() { Phlegma, Phlegma2, Phlegma3 },
+            DyskrasiaList = new() { Dyskrasia, Dyskrasia2 };
 
         // Action Buffs
         internal static class Buffs
@@ -93,6 +94,7 @@ namespace XIVSlothCombo.Combos.PvE
         private static SGEGauge Gauge => CustomComboFunctions.GetJobGauge<SGEGauge>();
         private static bool HasAddersgall(this SGEGauge gauge) => gauge.Addersgall > 0;
         private static bool HasAddersting(this SGEGauge gauge) => gauge.Addersting > 0;
+        private static float CountAddersgall(this SGEGauge gauge) => gauge.Addersgall + ((float)gauge.AddersgallTimer / 20000.0f);
 
         internal static class Config
         {
@@ -141,18 +143,6 @@ namespace XIVSlothCombo.Combos.PvE
                 EnhancedKerachole = 375;
         }
 
-
-        /*
-         * SGE_Kardia
-         * Soteria becomes Kardia when Kardia's Buff is not active or Soteria is on cooldown.
-         */
-        internal class SGE_Kardia : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Kardia;
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-                => actionID is Soteria && (!HasEffect(Buffs.Kardia) || IsOnCooldown(Soteria)) ? Kardia : actionID;
-        }
-
         /*
          * SGE_Rhizo
          * Replaces all Addersgal using Abilities (Taurochole/Druochole/Ixochole/Kerachole) with Rhizomata if out of Addersgall stacks
@@ -166,19 +156,6 @@ namespace XIVSlothCombo.Combos.PvE
         }
 
         /*
-         * Druo/Tauro
-         * Druochole Upgrade to Taurochole (like a trait upgrade)
-         * Replaces Druocole with Taurochole when Taurochole is available
-         * (As of 6.0) Taurochole (single target massive insta heal w/ cooldown), Druochole (Single target insta heal)
-         */
-        internal class SGE_DruoTauro : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_DruoTauro;
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-                => actionID is Druochole && ActionReady(Taurochole) ? Taurochole : actionID;
-        }
-
-        /*
          * SGE_ZoePneuma (Zoe to Pneuma Combo)
          * Places Zoe on top of Pneuma when both are available.
          */
@@ -187,6 +164,28 @@ namespace XIVSlothCombo.Combos.PvE
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_ZoePneuma;
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
                 => actionID is Pneuma && ActionReady(Pneuma) && IsOffCooldown(Zoe) ? Zoe : actionID;
+        }
+
+        /*
+         * SGE_Haima (Haima to Panhaima combo)
+         * replaces Haima with Panhaima if you are not targeting an ally
+         */
+        internal class SGE_Haima : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Haima;
+            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+                    => actionID is Haima && (!HasFriendlyTarget()) ? Panhaima : actionID;
+        }
+
+        /*
+         * SGE_Krasis
+         * replaces Krasis with Physis2 if Krasis is on CD but Physis2 is not
+         */
+        internal class SGE_Krasis : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Krasis;
+            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+                    => actionID is Krasis && ActionReady(Physis2) && (!IsOffCooldown(Krasis)) ? Physis2 : actionID;
         }
 
         /*
@@ -363,42 +362,6 @@ namespace XIVSlothCombo.Combos.PvE
                         return Eukrasia;
                     }
                 }
-                return actionID;
-            }
-        }
-
-        /*
-         * SGE_Raise (Swiftcast Raise)
-         * Swiftcast becomes Egeiro when on cooldown
-         */
-        internal class SGE_Raise : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Raise;
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-                    => actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast) ? Egeiro : actionID;
-        }
-
-        /* 
-         * SGE_Eukrasia (Eukrasia combo)
-         * Normally after Eukrasia is used and updates the abilities, it becomes disabled
-         * This will "combo" the action to user selected action
-         */
-        internal class SGE_Eukrasia : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Eukrasia;
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-            {
-                if (actionID is Eukrasia && HasEffect(Buffs.Eukrasia))
-                {
-                    switch ((int)Config.SGE_Eukrasia_Mode)
-                    {
-                        case 0: return OriginalHook(Dosis);
-                        case 1: return OriginalHook(Diagnosis);
-                        case 2: return OriginalHook(Prognosis);
-                        default: break;
-                    }
-                }
-
                 return actionID;
             }
         }

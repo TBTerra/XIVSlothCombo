@@ -2774,6 +2774,15 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Eukrasia Feature", "Eukrasia turns into the selected Eukrasian-type action when active.", SGE.JobID, 1000, "", "")]
         SGE_Eukrasia = 14910,
 
+        [ReplaceSkill(SGE.Haima)]
+        [CustomComboInfo("Haima Feature", "Haima turns into Panhaima if not targeting an ally", SGE.JobID, 1100, "", "")]
+        SGE_Haima = 14920,
+
+        [ReplaceSkill(SGE.Krasis)]
+        [CustomComboInfo("Heal buff Feature", "Krasis turns into Physis2 when on cooldown(and Physis2 isnt)", SGE.JobID, 1200, "", "")]
+        SGE_Krasis = 14930,
+
+
         [Variant]
         [VariantParent(SGE_ST_DPS_EDosis, SGE_AoE_DPS)]
         [CustomComboInfo("Spirit Dart Option", "Use Variant Spirit Dart whenever the debuff is not present or less than 3s.", SGE.JobID)]
