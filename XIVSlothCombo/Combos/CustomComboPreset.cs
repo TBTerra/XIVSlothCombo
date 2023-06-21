@@ -2782,19 +2782,22 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Heal buff Feature", "Krasis turns into Physis2 when on cooldown(and Physis2 isnt)", SGE.JobID, 1200, "", "")]
         SGE_Krasis = 14930,
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         [Variant]
         [VariantParent(SGE_ST_DPS_EDosis, SGE_AoE_DPS)]
         [CustomComboInfo("Spirit Dart Option", "Use Variant Spirit Dart whenever the debuff is not present or less than 3s.", SGE.JobID)]
-        SGE_DPS_Variant_SpiritDart = 14920,
+        SGE_DPS_Variant_SpiritDart = 14940,
 
         [Variant]
         [VariantParent(SGE_ST_DPS, SGE_AoE_DPS)]
         [CustomComboInfo("Rampart Option", "Use Variant Rampart on cooldown.", SGE.JobID)]
-        SGE_DPS_Variant_Rampart = 14930,
+        SGE_DPS_Variant_Rampart = 14950,
         #endregion
 
-        // Last value = 14930
+        // Last value = 14950
 
         #endregion
 
